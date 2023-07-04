@@ -1,15 +1,21 @@
 @Library('my-library@main') _
+def z = new com.sandeep.myDocker()
 pipeline {
     agent any 
     stages {
-        stage('Build') { 
+        stage('Docker Build') { 
             steps {
                 script {
-                  def z = new com.sandeep.myDocker()
                       z.dockerBuild('my-image')
                 }
             }
         }
-
+        stage('Print env') { 
+            steps {
+                script {
+                      z.greetName('sandeep')
+                }
+            }
+        }
     }
 }
