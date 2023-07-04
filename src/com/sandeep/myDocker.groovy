@@ -5,7 +5,7 @@ def dockerBuild(name) {
 }
 
 def greetName(name) {
-  printenv
-  echo "${name}"
+  sh "printenv"
+  sh "echo "${name}""
 }
 return this
