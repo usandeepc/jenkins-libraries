@@ -1,12 +1,12 @@
 @Library('my-library@main') _
-
+def z = new com.sandeep.myDocker()
 pipeline {
     agent any 
     stages {
         stage('Print env') { 
             steps {
                 script {
-                    def z = new com.sandeep.myDocker()
+                    
                     z.greetName('sandeep')
                 }
             }
