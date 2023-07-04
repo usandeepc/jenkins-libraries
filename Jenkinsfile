@@ -1,4 +1,4 @@
-@Library('my-library') _
+@Library('my-library@main') _
 pipeline {
     agent any 
     stages {
