@@ -1,3 +1,17 @@
 @Library('my-library')
-def z = new com.sandeep.myDocker()
-z.dockerBuild('my-image')
+
+
+pipeline {
+    agent any 
+    stages {
+        stage('Build') { 
+            steps {
+                script {
+                  def z = new com.sandeep.myDocker()
+                      z.dockerBuild('my-image')
+                }
+            }
+        }
+
+    }
+}
