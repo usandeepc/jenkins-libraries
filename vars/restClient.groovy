@@ -1,3 +1,5 @@
+@Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7.1')
+
 import groovyx.net.http.HTTPBuilder
 
 def callRestEndpoint(String url, String method, String username, String password, Map<String, String> headers = [:], Map<String, String> queryParams = [:], String requestBody = null) {
