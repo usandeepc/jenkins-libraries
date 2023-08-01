@@ -18,6 +18,7 @@ def call(Map config = [:]) {
     def response = httpRequest authentication: 'nexusrepositorycreds', url: "http://ec2-54-189-118-149.us-west-2.compute.amazonaws.com:8081/service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-integration&name=epm-spa-integration/epm-integration-2023.07*"
     println("Response: ${response.content}")
     def json = readJSON text: response.content
+    def latestBuildNumber = 0
     for (item in json.items) {
         def path = item.assets[0].path
         def buildNumber = path =~ /[0-9]+\.[0-9]+\.[0-9]+/
