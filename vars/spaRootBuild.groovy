@@ -21,23 +21,12 @@ def call(Map config = [:]) {
     sh 'pwd'
     withCredentials([usernamePassword(credentialsId: 'nexusrepositorycreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
       utitlities_url = """${nexusUrl}service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-utilities&name=epm-spa-utilities/epm-utilities-2023.07*"""
-      def http = new HttpBuilder(url)
-      http.auth.basic(${USERNAME}, ${PASSWORD}, AuthType.BASIC)
-      def response = http.get() { resp ->
-        // Check if the response is successful
-        if (resp.statusLine.statusCode == 200) {
-            return new JsonSlurper().parseText(resp.entity.content.text)
-        } else {
-            throw new RuntimeException("Failed to get JSON data. Status: ${resp.statusLine}")
-        }
-      }
-      def buildNumbers = response.items.collect { item ->
-        def path = item.assets[0].path
-        def buildNumber = (path =~ /.*release-2023\.07\.(\d+)\.tar\.gz/)?.group(1)
-        return buildNumber ? buildNumber.toInteger() : null
-      }
-      buildNumbers.sort()
-      utilities_version = buildNumbers.last()
+      def utilities_version = sh(
+            returnStdout: true,
+            script: '''
+                curl -s -u admin:nexus 'http://ec2-54-189-118-149.us-west-2.compute.amazonaws.com:8081/service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-integration&name=epm-spa-integration/epm-integration-2023.07*' | jq '.items[].assets[].path' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | cut -d '.' -f 3 | sort -r | head -1
+            '''
+        ).trim()
       sh """
       echo ${utilities_version}
       //curl -u ${USERNAME}:${PASSWORD} ${nexusUrl}/epm-spa-utilities/epm-utilities-\$utilities_version.tar.gz -o epm-utilities.tar.gz;
