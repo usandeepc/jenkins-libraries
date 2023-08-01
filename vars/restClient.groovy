@@ -2,7 +2,7 @@
 
 import groovyx.net.http.HTTPBuilder
 
-def callRestEndpoint(String url, String method, String username, String password, Map<String, String> headers = [:], Map<String, String> queryParams = [:], String requestBody = null) {
+def call(String url, String method, String username, String password, Map<String, String> headers = [:], Map<String, String> queryParams = [:], String requestBody = null) {
     def http = new HTTPBuilder(url)
 
     http.request(method, ContentType.JSON) { req ->
