@@ -21,13 +21,15 @@ def call(Map config = [:]) {
     def latestBuildNumber = 0
     for (item in json.items) {
         def path = item.assets[0].path
-        def buildNumber = path =~ /[0-9]+$/
+        def buildNumber = path =~ /[0-9]+\.[0-9]+\.[0-9]+/
         println("BuildNo: ${buildNumber}")
         if (buildNumber) {
             def extractedBuildNumber = buildNumber[0]
-            println("ExtractedBuildNo: ${extractedBuildNumber}")
-            if (extractedBuildNumber.toInteger() > latestBuildNumber) {
-                latestBuildNumber = extractedBuildNumber.toInteger()
+            println("extractedBuildNumber: ${extractedBuildNumber}")
+            def numericBuildNumber = extractedBuildNumber.tokenize('.').collect { it.toInteger() }.join('')
+            println("numericBuildNumber: ${numericBuildNumber}")
+            if (numericBuildNumber.toInteger() > latestBuildNumber) {
+                latestBuildNumber = numericBuildNumber.toInteger()
             }
         }
     }
