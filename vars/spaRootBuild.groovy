@@ -19,9 +19,15 @@ def call(Map config = [:]) {
     println("Response: ${response.content}")
     def json = readJSON text: response.content
     for (item in json.items) {
-        def id = item.id
         def path = item.assets[0].path
-        println "Item ID: ${id}, Path: ${path}"
+        def buildNumber = path =~ /[0-9]+\.[0-9]+\.[0-9]+/
+        if (buildNumber) {
+            def extractedBuildNumber = buildNumber[0]
+            def numericBuildNumber = extractedBuildNumber.tokenize('.').collect { it.toInteger() }.join('')
+            if (numericBuildNumber.toInteger() > latestBuildNumber) {
+                latestBuildNumber = numericBuildNumber.toInteger()
+            }
+        }
     }
     
 }
