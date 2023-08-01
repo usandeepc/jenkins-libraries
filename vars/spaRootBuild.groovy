@@ -1,3 +1,7 @@
+
+import groovy.json.JsonSlurper
+import groovyx.net.http.HttpBuilder
+import groovyx.net.http.AuthType
 def call(Map config = [:]) {
 
     def nexusUrl = "http://ec2-54-189-118-149.us-west-2.compute.amazonaws.com:8081/repository/ria-spa-repo/"
