@@ -1,4 +1,4 @@
-
+@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7.1')
 import groovy.json.JsonSlurper
 import groovyx.net.http.HttpBuilder
 import groovyx.net.http.AuthType
