@@ -15,7 +15,7 @@ def call(Map config = [:]) {
         'epm-spa-dashboard' : "epm-dashboard",
     ]
     sh 'pwd'
-    def response = httpRequest authentication: 'nexusrepositorycreds', "${nexusUrl}service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-integration&name=epm-spa-integration/epm-integration-2023.07*'"
+    def response = httpRequest authentication: 'nexusrepositorycreds', "${nexusUrl}service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-integration&name=epm-spa-integration/epm-integration-2023.07*"
     echo ${response}
     
 }
