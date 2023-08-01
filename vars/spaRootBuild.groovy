@@ -17,29 +17,5 @@ def call(Map config = [:]) {
     sh 'pwd'
     def response = httpRequest authenticate: 'nexusrepositorycreds', "${nexusUrl}service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-integration&name=epm-spa-integration/epm-integration-2023.07*'"
     echo ${response}
-    withCredentials([usernamePassword(credentialsId: 'nexusrepositorycreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-      sh """
-      
-      //curl -u ${USERNAME}:${PASSWORD} ${nexusUrl}/epm-spa-utilities/epm-utilities-\$utilities_version.tar.gz -o epm-utilities.tar.gz;
-      //mkdir -p epm-spa-utilities/dist;
-      //tar -xvzf epm-utilities.tar.gz -C epm-spa-utilities/dist;
-      """
-      //repo_map.each{k,v->
-        sh """
-       // echo $component_version
-        //curl -u ${USERNAME}:${PASSWORD} ${nexusUrl}/${k}/${v}-\$component_version.tar.gz -o ${v}.tar.gz;
-        //mkdir -p ${k}/dist/release;
-        //tar -xvzf ${v}.tar.gz -C ${k}/dist/release;
-        """
-      }
-
-    }
-    nodejs(nodeJSInstallationName: 'node-16') {
-        
-        //sh 'npm install'
-        //sh 'npm run release'
-    }
     
-    
-    sh 'ls'
 }
