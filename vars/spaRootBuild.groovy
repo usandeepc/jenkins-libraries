@@ -22,8 +22,10 @@ def call(Map config = [:]) {
     for (item in json.items) {
         def path = item.assets[0].path
         def buildNumber = path =~ /[0-9]+$/
+        println("BuildNo: ${buildNumber}")
         if (buildNumber) {
             def extractedBuildNumber = buildNumber[0]
+            println("ExtractedBuildNo: ${extractedBuildNumber}")
             if (extractedBuildNumber.toInteger() > latestBuildNumber) {
                 latestBuildNumber = extractedBuildNumber.toInteger()
             }
