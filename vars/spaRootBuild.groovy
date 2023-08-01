@@ -30,6 +30,6 @@ def call(Map config = [:]) {
             }
         }
     }
-    println("Response: ${latestBuildNumber}")
+    println("LatestBuildNo: ${latestBuildNumber}")
     
 }
