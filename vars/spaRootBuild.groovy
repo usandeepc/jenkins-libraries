@@ -16,16 +16,32 @@ def call(Map config = [:]) {
     ]
     sh 'pwd'
     withCredentials([usernamePassword(credentialsId: 'nexusrepositorycreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+      utitlities_url = """${nexusUrl}service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-utilities&name=epm-spa-utilities/epm-utilities-2023.07*"""
+      def http = new HttpBuilder(url)
+      http.auth.basic(${USERNAME}, ${PASSWORD}, AuthType.BASIC)
+      def response = http.get() { resp ->
+        // Check if the response is successful
+        if (resp.statusLine.statusCode == 200) {
+            return new JsonSlurper().parseText(resp.entity.content.text)
+        } else {
+            throw new RuntimeException("Failed to get JSON data. Status: ${resp.statusLine}")
+        }
+      }
+      def buildNumbers = response.items.collect { item ->
+        def path = item.assets[0].path
+        def buildNumber = (path =~ /.*release-2023\.07\.(\d+)\.tar\.gz/)?.group(1)
+        return buildNumber ? buildNumber.toInteger() : null
+      }
+      buildNumbers.sort()
+      utilities_version = buildNumbers.last()
       sh """
-      utilities_version="\$(curl -s -u '${USERNAME}:${PASSWORD} '${nexusUrl}service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-utilities&name=epm-spa-utilities/epm-utilities-2023.07*' \| jq '.items[].assets[].path' \| grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+' \| cut -d '.' -f 3 \| sort -r \| head -1)"
-      echo $utilities_version
+      echo ${utilities_version}
       //curl -u ${USERNAME}:${PASSWORD} ${nexusUrl}/epm-spa-utilities/epm-utilities-\$utilities_version.tar.gz -o epm-utilities.tar.gz;
       mkdir -p epm-spa-utilities/dist;
       //tar -xvzf epm-utilities.tar.gz -C epm-spa-utilities/dist;
       """
       repo_map.each{k,v->
         sh """
-        component_version="\$(curl -s -u ${USERNAME}:${PASSWORD} '${nexusUrl}service/rest/v1/search?repository=ria-spa-repo&group=/${k}&name=${k}/${v}-2023.07*' \| jq '.items[].assets[].path' \| grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+' \| cut -d '.' -f 3 \| sort -r \| head -1)"
         echo $component_version
         //curl -u ${USERNAME}:${PASSWORD} ${nexusUrl}/${k}/${v}-\$component_version.tar.gz -o ${v}.tar.gz;
         mkdir -p ${k}/dist/release;
