@@ -16,6 +16,6 @@ def call(Map config = [:]) {
     ]
     sh 'pwd'
     def response = httpRequest authentication: 'nexusrepositorycreds', url: "http://ec2-54-189-118-149.us-west-2.compute.amazonaws.com:8081/service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-integration&name=epm-spa-integration/epm-integration-2023.07*"
-    echo ${response}
+    echo "${response}"
     
 }
