@@ -30,5 +30,6 @@ def call(Map config = [:]) {
             }
         }
     }
+    println("Response: ${latestBuildNumber}")
     
 }
