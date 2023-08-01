@@ -20,7 +20,7 @@ def call(Map config = [:]) {
       def utilities_version = sh(
             returnStdout: true,
             script: '''
-                curl -s -u ${USERNAME}:{PASSWORD} 'http://ec2-54-189-118-149.us-west-2.compute.amazonaws.com:8081/service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-integration&name=epm-spa-integration/epm-integration-2023.07*' | jq '.items[].assets[].path' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | cut -d '.' -f 3 | sort -r | head -1
+                curl -s -u ${USERNAME}:{PASSWORD} 'http://ec2-54-189-118-149.us-west-2.compute.amazonaws.com:8081/service/rest/v1/search?repository=ria-spa-repo&group=/epm-spa-integration&name=epm-spa-integration/epm-integration-2023.07*' | jq '.items[].assets[].path' | grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+' | cut -d '.' -f 3 | sort -r | head -1
             '''
         ).trim()
       sh """
